@@ -1,10 +1,11 @@
-package com.example.yebon.repeatudemykotlin.chapter1
+package com.example.yebon.repeatudemykotlin.view.main
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.yebon.repeatudemykotlin.R
 import com.example.yebon.repeatudemykotlin.chapter1.util.Utils
 import com.example.yebon.repeatudemykotlin.chapter1.util.replace
+import com.example.yebon.repeatudemykotlin.view.main.home.HomeFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
