@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.yebon.repeatudemykotlin.R
+import com.example.yebon.repeatudemykotlin.data.source.image.ImageRepository
 import com.example.yebon.repeatudemykotlin.view.main.home.presenter.HomeContract
 import com.example.yebon.repeatudemykotlin.view.main.home.presenter.HomePresenter
 import kotlinx.android.synthetic.main.fragment_home.*
@@ -13,7 +14,7 @@ import kotlinx.android.synthetic.main.fragment_home.*
 class HomeFragment : Fragment(), HomeContract.View {
 
     private val presenter by lazy {
-        HomePresenter(this)
+        HomePresenter(this, ImageRepository)
     }
 
     override fun onCreateView(
