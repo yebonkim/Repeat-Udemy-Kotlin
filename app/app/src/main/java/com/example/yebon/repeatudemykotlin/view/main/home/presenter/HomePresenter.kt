@@ -1,27 +1,23 @@
 package com.example.yebon.repeatudemykotlin.view.main.home.presenter
 
 import android.os.AsyncTask
-import com.example.yebon.repeatudemykotlin.R
-import java.security.SecureRandom
+import com.example.yebon.repeatudemykotlin.data.source.image.ImageRepository
 
-class HomePresenter(private val mView: HomeContract.View): HomeContract.Presenter {
+class HomePresenter(
+    private val mView: HomeContract.View,
+    private val mImageRepository: ImageRepository): HomeContract.Presenter {
 
     override fun loadImage() {
-        ImageAsyncTask(mView).execute()
+        ImageAsyncTask(mView, mImageRepository).execute()
     }
 
-    class ImageAsyncTask(private val view: HomeContract.View) : AsyncTask<Unit, Unit, Int>() {
+    class ImageAsyncTask(private val view: HomeContract.View,
+                         private val mImageRepository: ImageRepository) : AsyncTask<Unit, Unit, Unit>() {
 
         private val SLEEP_TIME = 1000L
 
-        private val mImageIds = intArrayOf(R.drawable.sample_01, R.drawable.sample_02, R.drawable.sample_03,
-                R.drawable.sample_04, R.drawable.sample_05, R.drawable.sample_06, R.drawable.sample_07,
-                R.drawable.sample_08, R.drawable.sample_09, R.drawable.sample_10)
-
-        override fun doInBackground(vararg params: Unit?): Int {
+        override fun doInBackground(vararg params: Unit?) {
             Thread.sleep(SLEEP_TIME)
-
-            return SecureRandom().nextInt(mImageIds.size)
         }
 
         override fun onPreExecute() {
@@ -30,12 +26,13 @@ class HomePresenter(private val mView: HomeContract.View): HomeContract.Presente
             view.showProgress()
         }
 
-        override fun onPostExecute(result: Int?) {
+        override fun onPostExecute(result: Unit?) {
             super.onPostExecute(result)
 
             view.hideProgress()
-            val imageId = mImageIds[result ?: 0]
-            view.showImage(imageId)
+            mImageRepository.loadImageFileId {
+                view.showImage(it)
+            }
         }
 
     }
