@@ -2,38 +2,50 @@ package com.example.yebon.repeatudemykotlin.view.main.home.presenter
 
 import android.os.AsyncTask
 import com.example.yebon.repeatudemykotlin.data.source.image.ImageRepository
+import com.example.yebon.repeatudemykotlin.view.main.home.adapter.model.ImageRecyclerModel
 
 class HomePresenter(
-    private val mView: HomeContract.View,
-    private val mImageRepository: ImageRepository): HomeContract.Presenter {
+    private val view: HomeContract.View,
+    private val imageRepository: ImageRepository,
+    private val imageRecyclerModel: ImageRecyclerModel
+) : HomeContract.Presenter {
+
+    var isLoading = false
 
     override fun loadImage() {
-        ImageAsyncTask(mView, mImageRepository).execute()
+        ImageAsyncTask(this, view, imageRepository, imageRecyclerModel).execute()
     }
 
-    class ImageAsyncTask(private val view: HomeContract.View,
-                         private val mImageRepository: ImageRepository) : AsyncTask<Unit, Unit, Unit>() {
-
-        private val SLEEP_TIME = 1000L
+    class ImageAsyncTask(
+        private val homePresenter: HomePresenter,
+        private val view: HomeContract.View,
+        private val imageRepository: ImageRepository,
+        private val imageRecyclerModel: ImageRecyclerModel
+    ) : AsyncTask<Unit, Unit, Unit>() {
 
         override fun doInBackground(vararg params: Unit?) {
-            Thread.sleep(SLEEP_TIME)
+            imageRepository.loadImageList({
+                it.forEach {
+                    imageRecyclerModel.addItem(it)
+                }
+            }, 10)
+            Thread.sleep(1000)
         }
 
         override fun onPreExecute() {
             super.onPreExecute()
 
+            homePresenter.isLoading = true
             view.showProgress()
         }
 
         override fun onPostExecute(result: Unit?) {
             super.onPostExecute(result)
 
+            imageRecyclerModel.notifyDataSetChang()
             view.hideProgress()
-            mImageRepository.loadImageFileId {
-                view.showImage(it)
-            }
-        }
 
+            homePresenter.isLoading = false
+        }
     }
 }

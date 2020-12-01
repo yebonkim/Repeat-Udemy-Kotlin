@@ -2,5 +2,5 @@ package com.example.yebon.repeatudemykotlin.data.source.image
 
 interface ImageDataSource {
 
-    fun loadImageFileId(imageId: (Int) -> Unit)
+    fun loadImageList(imageDataList: (List<ImageData>) -> Unit, size: Int)
 }
