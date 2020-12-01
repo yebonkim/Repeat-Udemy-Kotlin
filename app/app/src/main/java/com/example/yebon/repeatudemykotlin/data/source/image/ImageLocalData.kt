@@ -10,8 +10,12 @@ class ImageLocalData : ImageDataSource {
         R.drawable.sample_04, R.drawable.sample_05, R.drawable.sample_06, R.drawable.sample_07,
         R.drawable.sample_08, R.drawable.sample_09, R.drawable.sample_10)
 
-    override fun loadImageFileId(imageId: (Int) -> Unit) {
-        val idx = SecureRandom().nextInt(mImageIds.size)
-        imageId(mImageIds[idx])
+    override fun loadImageList(imageDataList: (List<ImageData>) -> Unit, size: Int) {
+        val list = mutableListOf<ImageData>()
+        for (index in 1..size) {
+            val randomIdx = (0..9).random()
+            list.add(ImageData(mImageIds[randomIdx], randomIdx.toString()))
+        }
+        imageDataList(list)
     }
 }
